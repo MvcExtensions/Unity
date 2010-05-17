@@ -16,7 +16,7 @@ namespace MvcExtensions.Unity
     using Microsoft.Practices.Unity;
 
     /// <summary>
-    /// Defines an adapter class which with backed by Unity <seealso cref="IUnityContainer">Container</seealso>.
+    /// Defines an adapter class which is backed by Unity <seealso cref="IUnityContainer">Container</seealso>.
     /// </summary>
     public class UnityAdapter : ServiceLocatorImplBase, IServiceRegistrar, IServiceInjector, IDisposable
     {
