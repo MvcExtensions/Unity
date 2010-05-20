@@ -55,7 +55,7 @@ namespace MvcExtensions.Unity
         }
 
         /// <summary>
-        /// Executes after the registered <see cref="IPerRequestTask"/> disposes.
+        /// Executes after the registered <see cref="PerRequestTask"/> disposes.
         /// </summary>
         protected override void OnPerRequestTasksDisposed()
         {

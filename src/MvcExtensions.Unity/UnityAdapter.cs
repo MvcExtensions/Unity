@@ -9,19 +9,15 @@ namespace MvcExtensions.Unity
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Linq;
 
-    using Microsoft.Practices.ServiceLocation;
     using Microsoft.Practices.Unity;
 
     /// <summary>
     /// Defines an adapter class which is backed by Unity <seealso cref="IUnityContainer">Container</seealso>.
     /// </summary>
-    public class UnityAdapter : ServiceLocatorImplBase, IServiceRegistrar, IServiceInjector, IDisposable
+    public class UnityAdapter : ContainerAdapter
     {
-        private bool disposed;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="UnityAdapter"/> class.
         /// </summary>
@@ -31,16 +27,6 @@ namespace MvcExtensions.Unity
             Invariant.IsNotNull(container, "container");
 
             Container = container;
-        }
-
-        /// <summary>
-        /// Releases unmanaged resources and performs other cleanup operations before the
-        /// <see cref="UnityAdapter"/> is reclaimed by garbage collection.
-        /// </summary>
-        [DebuggerStepThrough]
-        ~UnityAdapter()
-        {
-            Dispose(false);
         }
 
         /// <summary>
@@ -54,16 +40,6 @@ namespace MvcExtensions.Unity
         }
 
         /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        [DebuggerStepThrough]
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
         /// Registers the type.
         /// </summary>
         /// <param name="key">The key.</param>
@@ -71,7 +47,7 @@ namespace MvcExtensions.Unity
         /// <param name="implementationType">Type of the implementation.</param>
         /// <param name="lifetime">The lifetime of the service.</param>
         /// <returns></returns>
-        public virtual IServiceRegistrar RegisterType(string key, Type serviceType, Type implementationType, LifetimeType lifetime)
+        public override IServiceRegistrar RegisterType(string key, Type serviceType, Type implementationType, LifetimeType lifetime)
         {
             Invariant.IsNotNull(serviceType, "serviceType");
             Invariant.IsNotNull(implementationType, "implementationType");
@@ -108,7 +84,7 @@ namespace MvcExtensions.Unity
         /// <param name="serviceType">Type of the service.</param>
         /// <param name="instance">The instance.</param>
         /// <returns></returns>
-        public virtual IServiceRegistrar RegisterInstance(string key, Type serviceType, object instance)
+        public override IServiceRegistrar RegisterInstance(string key, Type serviceType, object instance)
         {
             Invariant.IsNotNull(serviceType, "serviceType");
             Invariant.IsNotNull(instance, "instance");
@@ -129,7 +105,7 @@ namespace MvcExtensions.Unity
         /// Injects the matching dependences.
         /// </summary>
         /// <param name="instance">The instance.</param>
-        public virtual void Inject(object instance)
+        public override void Inject(object instance)
         {
             if (instance != null)
             {
@@ -172,16 +148,9 @@ namespace MvcExtensions.Unity
         /// <summary>
         /// Releases unmanaged and - optionally - managed resources
         /// </summary>
-        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
-        [DebuggerStepThrough]
-        protected virtual void Dispose(bool disposing)
+        protected override void DisposeCore()
         {
-            if (!disposed && disposing)
-            {
-                Container.Dispose();
-            }
-
-            disposed = true;
+            Container.Dispose();
         }
     }
 }

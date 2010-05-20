@@ -30,10 +30,10 @@ namespace MvcExtensions.Unity
         }
 
         /// <summary>
-        /// Creates the service locator.
+        /// Creates the container adapter.
         /// </summary>
         /// <returns></returns>
-        protected override IServiceLocator CreateServiceLocator()
+        protected override ContainerAdapter CreateAdapter()
         {
             IUnityContainer container = new UnityContainer();
 
@@ -49,7 +49,7 @@ namespace MvcExtensions.Unity
         /// </summary>
         protected override void LoadModules()
         {
-            IUnityContainer container = ((UnityAdapter)ServiceLocator).Container;
+            IUnityContainer container = ((UnityAdapter)Adapter).Container;
 
             BuildManager.ConcreteTypes
                         .Where(type => moduleType.IsAssignableFrom(type) && type.HasDefaultConstructor())

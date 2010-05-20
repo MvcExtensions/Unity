@@ -15,14 +15,14 @@ namespace MvcExtensions.Unity.Tests
     public class UnityBootstrapperTests
     {
         [Fact]
-        public void Should_be_able_to_create_service_locator()
+        public void Should_be_able_to_create_adapter()
         {
             var buildManager = new Mock<IBuildManager>();
             buildManager.SetupGet(bm => bm.Assemblies).Returns(new[] { GetType().Assembly });
 
             var bootstrapper = new UnityBootstrapper(buildManager.Object);
 
-            Assert.IsType<UnityAdapter>(bootstrapper.ServiceLocator);
+            Assert.IsType<UnityAdapter>(bootstrapper.Adapter);
         }
 
         [Fact]
@@ -35,7 +35,7 @@ namespace MvcExtensions.Unity.Tests
 
             DummyModule.Loaded = false;
 
-            Assert.IsType<UnityAdapter>(bootstrapper.ServiceLocator);
+            Assert.IsType<UnityAdapter>(bootstrapper.Adapter);
 
             Assert.True(DummyModule.Loaded);
         }

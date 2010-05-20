@@ -22,7 +22,7 @@ namespace MvcExtensions.Unity.Tests
     public class UnityAdapterTests
     {
         private readonly Mock<IUnityContainer> container;
-        private UnityAdapter adapter;
+        private readonly UnityAdapter adapter;
 
         public UnityAdapterTests()
         {
@@ -38,15 +38,6 @@ namespace MvcExtensions.Unity.Tests
             adapter.Dispose();
 
             container.VerifyAll();
-        }
-
-        [Fact]
-        public void Should_finalize()
-        {
-            adapter = null;
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
         }
 
         [Theory]
