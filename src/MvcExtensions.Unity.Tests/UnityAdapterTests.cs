@@ -94,6 +94,7 @@ namespace MvcExtensions.Unity.Tests
         [InlineData("")]
         public void Should_be_able_to_register_instance(string key)
         {
+
             if (string.IsNullOrEmpty(key))
             {
                 container.Setup(c => c.RegisterInstance(It.IsAny<Type>(), null, It.IsAny<object>(), It.IsAny<LifetimeManager>())).Verifiable();
