@@ -60,7 +60,7 @@ namespace MvcExtensions.Unity
 
             if (string.IsNullOrEmpty(key))
             {
-                if (Container.Registrations.Any(registration => registration.RegisteredType == serviceType))
+                if (Container.Registrations.Any(registration => registration.RegisteredType.Equals(serviceType)))
                 {
                     Container.RegisterType(serviceType, implementationType, implementationType.FullName, lifeTimeManager);
                 }
@@ -114,6 +114,16 @@ namespace MvcExtensions.Unity
         }
 
         /// <summary>
+        /// Release the memory occupied by the specified instance.
+        /// </summary>
+        /// <param name="instance"></param>
+        public override void Release(object instance)
+        {
+            Container.Teardown(instance);
+            base.Release(instance);
+        }
+
+        /// <summary>
         /// Gets the matching instance for the given type and key.
         /// </summary>
         /// <param name="serviceType">Type of the service.</param>
@@ -135,7 +145,7 @@ namespace MvcExtensions.Unity
 
             List<object> instances = new List<object>();
 
-            if (Container.Registrations.Any(registration => registration.RegisteredType == serviceType && string.IsNullOrEmpty(registration.Name)))
+            if (Container.Registrations.Any(registration => registration.RegisteredType.Equals(serviceType) && string.IsNullOrEmpty(registration.Name)))
             {
                 instances.Add(Container.Resolve(serviceType));
             }
