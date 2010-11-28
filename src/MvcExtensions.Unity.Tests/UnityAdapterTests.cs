@@ -11,6 +11,7 @@ namespace MvcExtensions.Unity.Tests
     using System.Collections.Generic;
     using System.Globalization;
     using System.Reflection;
+    using System.Web.Mvc;
 
     using Microsoft.Practices.ObjectBuilder2;
     using Microsoft.Practices.Unity;
@@ -121,27 +122,27 @@ namespace MvcExtensions.Unity.Tests
         }
 
         [Fact]
-        public void Should_be_able_to_get_instance_by_type()
+        public void Should_be_able_to_get_service_by_type()
         {
             container.Setup(c => c.Resolve(It.IsAny<Type>(), It.IsAny<string>(), It.IsAny<ResolverOverride[]>()));
 
-            adapter.GetInstance<DummyObject>();
+            adapter.GetService<DummyObject>();
 
             container.VerifyAll();
         }
 
         [Fact]
-        public void Should_be_able_to_get_instance_by_type_and_key()
+        public void Should_be_able_to_get_service_by_type_and_key()
         {
             container.Setup(c => c.Resolve(It.IsAny<Type>(), It.IsAny<string>()));
 
-            adapter.GetInstance<DummyObject>("foo");
+            adapter.GetService<DummyObject>("foo");
 
             container.VerifyAll();
         }
 
         [Fact]
-        public void Should_be_able_to_get_all_instances()
+        public void Should_be_able_to_get_services()
         {
             var registration = (ContainerRegistration)Activator.CreateInstance(typeof(ContainerRegistration), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { typeof(DummyObject), null, new PolicyList() }, CultureInfo.CurrentCulture);
 
@@ -152,7 +153,7 @@ namespace MvcExtensions.Unity.Tests
             container.Setup(c => c.Resolve(typeof(DummyObject), It.IsAny<string>(), It.IsAny<ResolverOverride[]>())).Returns(new DummyObject()).Verifiable();
             container.Setup(c => c.ResolveAll(typeof(DummyObject), It.IsAny<ResolverOverride[]>())).Returns(new[] { new DummyObject() }).Verifiable();
 
-            adapter.GetAllInstances(typeof(DummyObject));
+            adapter.GetServices(typeof(DummyObject));
 
             container.Verify();
         }

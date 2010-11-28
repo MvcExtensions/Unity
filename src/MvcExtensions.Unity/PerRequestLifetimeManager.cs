@@ -69,23 +69,27 @@ namespace MvcExtensions.Unity
 
             object value;
 
-            if (lifetimeManagers.TryGetValue(this, out value))
+            if (!lifetimeManagers.TryGetValue(this, out value))
             {
-                DisposeValue(value);
-                lifetimeManagers.Remove(this);
+                return;
             }
+
+            DisposeValue(value);
+            lifetimeManagers.Remove(this);
         }
 
         private static void DisposeValue(object value)
         {
-            if (value != null)
+            if (value == null)
             {
-                IDisposable disposable = value as IDisposable;
+                return;
+            }
 
-                if (disposable != null)
-                {
-                    disposable.Dispose();
-                }
+            IDisposable disposable = value as IDisposable;
+
+            if (disposable != null)
+            {
+                disposable.Dispose();
             }
         }
     }

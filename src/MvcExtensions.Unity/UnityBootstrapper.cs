@@ -52,7 +52,7 @@ namespace MvcExtensions.Unity
 
             BuildManager.ConcreteTypes
                         .Where(type => moduleType.IsAssignableFrom(type) && type.HasDefaultConstructor())
-                        .Select(type => Activator.CreateInstance(type))
+                        .Select(Activator.CreateInstance)
                         .Cast<IModule>()
                         .Each(module => module.Load(container));
         }

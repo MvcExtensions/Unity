@@ -60,7 +60,7 @@ namespace MvcExtensions.Unity
 
             if (string.IsNullOrEmpty(key))
             {
-                if (Container.Registrations.Any(registration => registration.RegisteredType == serviceType))
+                if (Container.Registrations.Any(registration => registration.RegisteredType.Equals(serviceType)))
                 {
                     Container.RegisterType(serviceType, implementationType, implementationType.FullName, lifeTimeManager);
                 }
@@ -114,28 +114,28 @@ namespace MvcExtensions.Unity
         }
 
         /// <summary>
-        /// Gets the matching instance for the given type and key.
+        /// Gets the service.
         /// </summary>
         /// <param name="serviceType">Type of the service.</param>
         /// <param name="key">The key.</param>
         /// <returns></returns>
-        protected override object DoGetInstance(Type serviceType, string key)
+        protected override object DoGetService(Type serviceType, string key)
         {
             return string.IsNullOrEmpty(key) ? Container.Resolve(serviceType) : Container.Resolve(serviceType, key);
         }
 
         /// <summary>
-        /// Gets all the instances for the given type.
+        /// Gets the services.
         /// </summary>
         /// <param name="serviceType">Type of the service.</param>
         /// <returns></returns>
-        protected override IEnumerable<object> DoGetAllInstances(Type serviceType)
+        protected override IEnumerable<object> DoGetServices(Type serviceType)
         {
             Invariant.IsNotNull(serviceType, "serviceType");
 
             List<object> instances = new List<object>();
 
-            if (Container.Registrations.Any(registration => registration.RegisteredType == serviceType && string.IsNullOrEmpty(registration.Name)))
+            if (Container.Registrations.Any(registration => registration.RegisteredType.Equals(serviceType) && string.IsNullOrEmpty(registration.Name)))
             {
                 instances.Add(Container.Resolve(serviceType));
             }
