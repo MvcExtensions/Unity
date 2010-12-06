@@ -51,7 +51,7 @@ namespace MvcExtensions.Unity
         /// <returns></returns>
         protected override IBootstrapper CreateBootstrapper()
         {
-            return new UnityBootstrapper(BuildManagerWrapper.Current);
+            return new UnityBootstrapper(BuildManagerWrapper.Current, BootstrapperTasksRegistry.Current, PerRequestTasksRegistry.Current);
         }
 
         /// <summary>

@@ -20,7 +20,7 @@ namespace MvcExtensions.Unity.Tests
             var buildManager = new Mock<IBuildManager>();
             buildManager.SetupGet(bm => bm.Assemblies).Returns(new[] { GetType().Assembly });
 
-            var bootstrapper = new UnityBootstrapper(buildManager.Object);
+            var bootstrapper = new UnityBootstrapper(buildManager.Object, new Mock<IBootstrapperTasksRegistry>().Object, new Mock<IPerRequestTasksRegistry>().Object);
 
             Assert.IsType<UnityAdapter>(bootstrapper.Adapter);
         }
@@ -31,7 +31,7 @@ namespace MvcExtensions.Unity.Tests
             var buildManager = new Mock<IBuildManager>();
             buildManager.SetupGet(bm => bm.ConcreteTypes).Returns(new[] { typeof(DummyModule) });
 
-            var bootstrapper = new UnityBootstrapper(buildManager.Object);
+            var bootstrapper = new UnityBootstrapper(buildManager.Object, new Mock<IBootstrapperTasksRegistry>().Object, new Mock<IPerRequestTasksRegistry>().Object);
 
             DummyModule.Loaded = false;
 

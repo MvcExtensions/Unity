@@ -24,7 +24,9 @@ namespace MvcExtensions.Unity
         /// Initializes a new instance of the <see cref="UnityBootstrapper"/> class.
         /// </summary>
         /// <param name="buildManager">The build manager.</param>
-        public UnityBootstrapper(IBuildManager buildManager) : base(buildManager)
+        /// <param name="bootstrapperTasks">The bootstrapper tasks.</param>
+        /// <param name="perRequestTasks">The per request tasks.</param>
+        public UnityBootstrapper(IBuildManager buildManager, IBootstrapperTasksRegistry bootstrapperTasks, IPerRequestTasksRegistry perRequestTasks) : base(buildManager, bootstrapperTasks, perRequestTasks)
         {
         }
 
