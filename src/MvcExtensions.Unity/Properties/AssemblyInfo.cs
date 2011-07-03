@@ -8,9 +8,7 @@
 using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Security;
 
-[assembly: AllowPartiallyTrustedCallers]
 [assembly: AssemblyTitle("MvcExtensions.Unity")]
 [assembly: AssemblyProduct("MvcExtensions.Unity")]
 [assembly: CLSCompliant(true)]
