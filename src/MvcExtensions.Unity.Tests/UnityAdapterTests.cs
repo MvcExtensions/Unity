@@ -132,16 +132,6 @@ namespace MvcExtensions.Unity.Tests
         }
 
         [Fact]
-        public void Should_be_able_to_get_service_by_type_and_key()
-        {
-            container.Setup(c => c.Resolve(It.IsAny<Type>(), It.IsAny<string>()));
-
-            adapter.GetService<DummyObject>("foo");
-
-            container.VerifyAll();
-        }
-
-        [Fact]
         public void Should_be_able_to_get_services()
         {
             var registration = (ContainerRegistration)Activator.CreateInstance(typeof(ContainerRegistration), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { typeof(DummyObject), null, new PolicyList() }, CultureInfo.CurrentCulture);
