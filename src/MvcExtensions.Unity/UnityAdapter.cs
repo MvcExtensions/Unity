@@ -112,7 +112,7 @@ namespace MvcExtensions.Unity
         /// <returns></returns>
         protected override object DoGetService(Type serviceType)
         {
-            return Container.Resolve(serviceType);
+            return Container.IsRegistered(serviceType) ? Container.Resolve(serviceType) : null;
         }
 
         /// <summary>

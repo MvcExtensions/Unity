@@ -11,8 +11,6 @@ namespace MvcExtensions.Unity.Tests
     using System.Collections.Generic;
     using System.Globalization;
     using System.Reflection;
-    using System.Web.Mvc;
-
     using Microsoft.Practices.ObjectBuilder2;
     using Microsoft.Practices.Unity;
 
@@ -98,16 +96,6 @@ namespace MvcExtensions.Unity.Tests
             container.Setup(c => c.BuildUp(It.IsAny<Type>(), It.IsAny<DummyObject>(), It.IsAny<string>(), It.IsAny<ResolverOverride[]>()));
 
             adapter.Inject(dummy);
-
-            container.VerifyAll();
-        }
-
-        [Fact]
-        public void Should_be_able_to_get_service_by_type()
-        {
-            container.Setup(c => c.Resolve(It.IsAny<Type>(), It.IsAny<string>(), It.IsAny<ResolverOverride[]>()));
-
-            adapter.GetService<DummyObject>();
 
             container.VerifyAll();
         }
