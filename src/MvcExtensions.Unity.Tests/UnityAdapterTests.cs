@@ -60,17 +60,7 @@ namespace MvcExtensions.Unity.Tests
                 container.Setup(c => c.RegisterType(It.IsAny<Type>(), It.IsAny<Type>(), It.IsAny<string>(), It.IsAny<TransientLifetimeManager>(), It.IsAny<InjectionMember[]>())).Verifiable();
             }
 
-            adapter.RegisterType(null, typeof(DummyObject), typeof(DummyObject), lifetime);
-
-            container.Verify();
-        }
-
-        [Fact]
-        public void Should_be_able_to_register_named_service()
-        {
-            container.Setup(c => c.RegisterType(It.IsAny<Type>(), It.IsAny<Type>(), "foo", It.IsAny<TransientLifetimeManager>(), It.IsAny<InjectionMember[]>())).Verifiable();
-
-            adapter.RegisterType("foo", typeof(DummyObject), typeof(DummyObject), LifetimeType.Transient);
+            adapter.RegisterType(typeof(DummyObject), typeof(DummyObject), lifetime);
 
             container.Verify();
         }
@@ -85,26 +75,17 @@ namespace MvcExtensions.Unity.Tests
             container.SetupGet(c => c.Registrations).Returns(registrations);
             container.Setup(c => c.RegisterType(It.IsAny<Type>(), It.IsAny<Type>(), typeof(DummyObject).FullName, It.IsAny<TransientLifetimeManager>(), It.IsAny<InjectionMember[]>())).Verifiable();
 
-            adapter.RegisterType(null, typeof(DummyObject), typeof(DummyObject), LifetimeType.Transient);
+            adapter.RegisterType(typeof(DummyObject), typeof(DummyObject), LifetimeType.Transient);
 
             container.Verify();
         }
 
-        [Theory]
-        [InlineData("foo")]
-        [InlineData("")]
-        public void Should_be_able_to_register_instance(string key)
+        [Fact]
+        public void Should_be_able_to_register_instance()
         {
-            if (string.IsNullOrEmpty(key))
-            {
-                container.Setup(c => c.RegisterInstance(It.IsAny<Type>(), null, It.IsAny<object>(), It.IsAny<LifetimeManager>())).Verifiable();
-            }
-            else
-            {
-                container.Setup(c => c.RegisterInstance(It.IsAny<Type>(), key, It.IsAny<object>(), It.IsAny<LifetimeManager>())).Verifiable();
-            }
+            container.Setup(c => c.RegisterInstance(It.IsAny<Type>(), null, It.IsAny<object>(), It.IsAny<LifetimeManager>())).Verifiable();
 
-            adapter.RegisterInstance(key, typeof(DummyObject), new DummyObject());
+            adapter.RegisterInstance(typeof(DummyObject), new DummyObject());
 
             container.Verify();
         }

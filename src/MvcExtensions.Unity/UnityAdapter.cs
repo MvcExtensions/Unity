@@ -42,36 +42,36 @@ namespace MvcExtensions.Unity
         /// <summary>
         /// Registers the type.
         /// </summary>
-        /// <param name="key">The key.</param>
         /// <param name="serviceType">Type of the service.</param>
         /// <param name="implementationType">Type of the implementation.</param>
         /// <param name="lifetime">The lifetime of the service.</param>
         /// <returns></returns>
-        public override IServiceRegistrar RegisterType(string key, Type serviceType, Type implementationType, LifetimeType lifetime)
+        public override IServiceRegistrar RegisterType(Type serviceType, Type implementationType, LifetimeType lifetime)
         {
             Invariant.IsNotNull(serviceType, "serviceType");
             Invariant.IsNotNull(implementationType, "implementationType");
 
-            LifetimeManager lifeTimeManager = (lifetime == LifetimeType.PerRequest) ?
-                                              new PerRequestLifetimeManager() :
-                                              ((lifetime == LifetimeType.Singleton) ?
-                                              new ContainerControlledLifetimeManager() :
-                                              new TransientLifetimeManager() as LifetimeManager);
-
-            if (string.IsNullOrEmpty(key))
+            LifetimeManager lifeTimeManager;
+            switch (lifetime)
             {
-                if (Container.Registrations.Any(registration => registration.RegisteredType.Equals(serviceType)))
-                {
-                    Container.RegisterType(serviceType, implementationType, implementationType.FullName, lifeTimeManager);
-                }
-                else
-                {
-                    Container.RegisterType(serviceType, implementationType, lifeTimeManager);
-                }
+                case LifetimeType.PerRequest:
+                    lifeTimeManager = new PerRequestLifetimeManager();
+                    break;
+                case LifetimeType.Singleton:
+                    lifeTimeManager = new ContainerControlledLifetimeManager();
+                    break;
+                default:
+                    lifeTimeManager = new TransientLifetimeManager();
+                    break;
+            }
+
+            if (Container.Registrations.Any(registration => registration.RegisteredType.Equals(serviceType)))
+            {
+                Container.RegisterType(serviceType, implementationType, implementationType.FullName, lifeTimeManager);
             }
             else
             {
-                Container.RegisterType(serviceType, implementationType, key, lifeTimeManager);
+                Container.RegisterType(serviceType, implementationType, lifeTimeManager);
             }
 
             return this;
@@ -80,23 +80,15 @@ namespace MvcExtensions.Unity
         /// <summary>
         /// Registers the instance.
         /// </summary>
-        /// <param name="key">The key.</param>
         /// <param name="serviceType">Type of the service.</param>
         /// <param name="instance">The instance.</param>
         /// <returns></returns>
-        public override IServiceRegistrar RegisterInstance(string key, Type serviceType, object instance)
+        public override IServiceRegistrar RegisterInstance(Type serviceType, object instance)
         {
             Invariant.IsNotNull(serviceType, "serviceType");
             Invariant.IsNotNull(instance, "instance");
-
-            if (string.IsNullOrEmpty(key))
-            {
-                Container.RegisterInstance(serviceType, instance);
-            }
-            else
-            {
-                Container.RegisterInstance(serviceType, key, instance);
-            }
+            
+            Container.RegisterInstance(serviceType, instance);
 
             return this;
         }
@@ -117,11 +109,10 @@ namespace MvcExtensions.Unity
         /// Gets the service.
         /// </summary>
         /// <param name="serviceType">Type of the service.</param>
-        /// <param name="key">The key.</param>
         /// <returns></returns>
-        protected override object DoGetService(Type serviceType, string key)
+        protected override object DoGetService(Type serviceType)
         {
-            return string.IsNullOrEmpty(key) ? Container.Resolve(serviceType) : Container.Resolve(serviceType, key);
+            return Container.Resolve(serviceType);
         }
 
         /// <summary>
@@ -133,7 +124,7 @@ namespace MvcExtensions.Unity
         {
             Invariant.IsNotNull(serviceType, "serviceType");
 
-            List<object> instances = new List<object>();
+            var instances = new List<object>();
 
             if (Container.Registrations.Any(registration => registration.RegisteredType.Equals(serviceType) && string.IsNullOrEmpty(registration.Name)))
             {
